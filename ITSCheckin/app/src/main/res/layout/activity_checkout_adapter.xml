@@ -11,19 +11,22 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Project  : "
-        android:id="@+id/textView6" />
+        android:id="@+id/textView6"
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="desc"
-        android:id="@+id/textView7" />
+        android:id="@+id/textView7"
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="time"
-        android:id="@+id/textView8" />
+        android:id="@+id/textView8"
+        android:layout_marginLeft="10dp" />
 </LinearLayout>

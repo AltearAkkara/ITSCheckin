@@ -15,9 +15,9 @@ import android.widget.EditText;
 
 public class LoginActivity extends AppCompatActivity {
 
+    Toolbar toolbar;
     EditText userText,passwordText;
     Button loginButton;
-    Toolbar toolbar;
     SharedPreferences sp;
     SharedPreferences.Editor editor;
 
@@ -34,8 +34,8 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = (EditText)findViewById(R.id.editText2);
         loginButton = (Button)findViewById(R.id.buttonLogin);
         Log.i("Login","create");
-        String user = sp.getString("Username","");
-        String password = sp.getString("Password","");
+        String user = sp.getString("Username","testuser");
+        String password = sp.getString("Password","1234");
         userText.setText(user);
         passwordText.setText(password);
         setCustomComponent();

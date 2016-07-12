@@ -13,12 +13,21 @@
         android:layout_height="wrap_content"
         layout="@layout/app_bar" />
 
-    <FrameLayout
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/container01"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_centerVertical="true"></FrameLayout>-->
+
+    <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:name="com.akkaratanapat.altear.itscheckin.Fragment.LoginFragment"
         android:id="@+id/container01"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"></FrameLayout>
-
+        tools:layout="@layout/fragment_login"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

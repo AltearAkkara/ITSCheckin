@@ -12,14 +12,16 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
-        android:id="@+id/textView14" />
+        android:id="@+id/textView14"
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:id="@+id/textView15" />
+        android:id="@+id/textView15"
+        android:layout_marginLeft="10dp" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -32,7 +34,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
             android:id="@+id/textView16"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -46,13 +49,15 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:id="@+id/textView17" />
+        android:id="@+id/textView17"
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:id="@+id/textView18" />
+        android:id="@+id/textView18"
+        android:layout_marginLeft="10dp" />
 
 </LinearLayout>
