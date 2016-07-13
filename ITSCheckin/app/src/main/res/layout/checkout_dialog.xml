@@ -17,8 +17,28 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:hint="Job hour"
-        android:id="@+id/editText6"
+        android:hint="RT"
+        android:id="@+id/editTextRT"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:hint="OT"
+        android:id="@+id/editTextOT"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:hint="XT"
+        android:id="@+id/editTextXT"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp" />
 

@@ -3,7 +3,9 @@ package com.akkaratanapat.altear.itscheckin.Fragment;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +18,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -43,12 +46,19 @@ import java.util.Map;
  */
 public class CheckOutFragment extends Fragment {
 
-    String[] str1 = {"aaa"},str2 ={"ssss"},str3 = {"8"};
+    ArrayList<String> detailList = new ArrayList<String>(),timeList = new ArrayList<String>(),rtList = new ArrayList<String>(),otList = new ArrayList<String>(),xtList = new ArrayList<String>(),codeList = new ArrayList<String>(),projectList = new ArrayList<String>();
     ArrayList<String> id  = new ArrayList<String>(),code  = new ArrayList<String>(),name  = new ArrayList<String>();
     ArrayAdapter<String> arrayAdapter;
-    Boolean ok200 = true;
+    //Boolean ok200 = true;
     MainActivity activity;
     int position= 99;
+    EditText detail,rt,ot,xt;
+    String temp,mode="project";
+    ListView myListView;
+    CheckoutAdapter myAdapter;
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
     public CheckOutFragment() {
         // Required empty public constructor
     }
@@ -59,16 +69,21 @@ public class CheckOutFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_check_out, container, false);
-
-        new LoadCheckOut().execute();
+        sp = this.getActivity().getSharedPreferences("Temp", Context.MODE_PRIVATE);
+        editor = sp.edit();
+        if(name.isEmpty()){
+            Log.i("name","empty");
+            new LoadCheckOut().execute();
+        }
         arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_expandable_list_item_1, name);
-        CheckoutAdapter myAdapter = new CheckoutAdapter(getActivity(),android.R.layout.simple_list_item_1,str1,str2,str3);
-        ListView myListView = (ListView)rootView.findViewById(R.id.listView2);
+        myAdapter = new CheckoutAdapter(getActivity(),android.R.layout.simple_list_item_1,detailList,timeList,projectList);
+        myListView = (ListView)rootView.findViewById(R.id.listView2);
         myListView.setAdapter(myAdapter);
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Toast.makeText(getActivity(), str1[position], Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getActivity(), detailList.get(i), Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -81,13 +96,13 @@ public class CheckOutFragment extends Fragment {
                 aBuilder.setTitle("Confirmation.").setMessage("Do you want to check out?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        getFragmentManager().popBackStack();
+                        mode = "check out";
+                        new LoadCheckOut().execute();
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //do nothing
-
                     }
                 });
                 AlertDialog alertDialog = aBuilder.create();
@@ -100,15 +115,48 @@ public class CheckOutFragment extends Fragment {
         addTimeSheet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                arrayAdapter.notifyDataSetChanged();
                 final Dialog dialog = new Dialog(getActivity());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.checkout_dialog);
                 dialog.setCancelable(true);
+                detail = (EditText)dialog.findViewById(R.id.editText5);
+                rt = (EditText)dialog.findViewById(R.id.editTextRT);
+                ot = (EditText)dialog.findViewById(R.id.editTextOT);
+                xt = (EditText)dialog.findViewById(R.id.editTextXT);
                 Button addButton = (Button)dialog.findViewById(R.id.button12);
                 addButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Toast.makeText(getActivity(),"Add",Toast.LENGTH_SHORT).show();
+                        detailList.add(detail.getText().toString());
+                        temp ="";
+                        if(rt.length()>0){
+                            temp += "RT " + rt.getText().toString();
+                            rtList.add(rt.getText().toString());
+                        }
+                        else{
+                            rtList.add("");
+                        }
+                        if(ot.length()>0){
+                            temp += "OT " + rt.getText().toString();
+                            otList.add(ot.getText().toString());
+                        }
+                        else{
+                            otList.add("");
+                        }
+                        if(xt.length()>0){
+                            temp += "XT " + rt.getText().toString();
+                            xtList.add(xt.getText().toString());
+                        }else{
+                            xtList.add("");
+                        }
+                        timeList.add(temp);
+
+                        projectList.add(name.get(position));
+                        codeList.add(code.get(position));
+                        myAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
                     }
                 });
                 Button cancelButton = (Button)dialog.findViewById(R.id.button13);
@@ -123,6 +171,7 @@ public class CheckOutFragment extends Fragment {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Toast.makeText(getContext(),"Select " + i,Toast.LENGTH_SHORT).show();
                         position = i;
                     }
                 });
@@ -132,9 +181,15 @@ public class CheckOutFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (MainActivity)getActivity();
+    }
+
     public void requestProject() {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        final String url = "http://itsserver.itsconsultancy.co.th:8080/Itsconsultancy/itscheckin/service/location/";
+        final String url = "http://itsserver.itsconsultancy.co.th:8080/Itsconsultancy/itscheckin/service/project/";
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", Constants.API_KEY);
         CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
@@ -154,12 +209,12 @@ public class CheckOutFragment extends Fragment {
                             code.add(resData.getJSONObject(i).getString("code"));
                             name.add(resData.getJSONObject(i).getString("name"));
                         }
-                        ok200 = true;
+                        //ok200 = true;
                         arrayAdapter.notifyDataSetChanged();
                     }
                     else{
                         Toast.makeText(getContext(),resRespone,Toast.LENGTH_LONG).show();
-                        ok200 = false;
+                        //ok200 = false;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -169,8 +224,78 @@ public class CheckOutFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError response) {
                 Log.d("Response: ", response.toString());
-                ok200 = false;
-                //Toast.makeText(getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
+                //ok200 = false;
+                Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        requestQueue.add(jsObjRequest);
+    }
+
+    public String getTimeSheetString(){
+
+        StringBuilder strBuilder = new StringBuilder();
+        strBuilder.append("[");
+        for(int count = 0;count<detailList.size();count++){
+            strBuilder.append("{\"pcode\": +\"");
+            strBuilder.append(codeList.get(count));
+            strBuilder.append("\", \"detail\": ");
+            strBuilder.append(detailList.get(count));
+            strBuilder.append("\", \"rt\": ");
+            strBuilder.append(rtList.get(count));
+            strBuilder.append("\", \"ot\": ");
+            strBuilder.append(otList.get(count));
+            strBuilder.append("\", \"xt\": ");
+            strBuilder.append(xtList.get(count));
+            strBuilder.append("}");
+            if(!(count == detailList.size()-1))strBuilder.append(",");
+        }
+        strBuilder.append("]");
+        return strBuilder.toString();
+    }
+
+    public void requestCheckOut() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        final String url = "http://itsserver.itsconsultancy.co.th:8080/Itsconsultancy/itscheckin/service/checkout/";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", Constants.API_KEY);
+        params.put("u", sp.getString("Username", "testuser"));
+        params.put("data", getTimeSheetString());
+        params.put("mode", "dev");
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String resReturn, resCode, resType, resRespone;
+
+                try {
+                    resReturn = response.getString("return");
+                    resCode = response.getString("code");
+                    resType = response.getString("type");
+                    resRespone = response.getString("response");
+                    if (resReturn.equals("true")) {
+                        String resData = response.getString("add_timesheet");
+                        //ok200 = true;
+                        getFragmentManager().popBackStack();
+                        editor.putString("checkInLocation","---");
+                        editor.putString("checkInLocationID", "null");
+                        editor.putString("dateCheckIn", "--/--/--");
+                        editor.putString("isCheckIn", "CHECK IN");
+                        editor.commit();
+                    }
+                    else{
+                        Toast.makeText(getContext(),resRespone,Toast.LENGTH_LONG).show();
+                        //ok200 = false;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError response) {
+                Log.d("Response: ", response.toString());
+                //ok200 = false;
+                Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -181,20 +306,38 @@ public class CheckOutFragment extends Fragment {
         ProgressDialog pd;
 
         protected void onPreExecute() {
-//            pd = new ProgressDialog(activity);
-////            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//            pd.setTitle("Loging in...");
-//            pd.setMessage("Loading ...");
-//            pd.setCancelable(false);
-//            pd.setIndeterminate(false);
-////            pd.setMax(100);
-////            pd.setProgress(0);
-//            pd.show();
+            pd = new ProgressDialog(activity);
+//            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pd.setTitle("Loging in...");
+            pd.setMessage("Loading ...");
+            pd.setCancelable(false);
+            pd.setIndeterminate(false);
+//            pd.setMax(100);
+//            pd.setProgress(0);
+            pd.show();
 
         }
 
         protected Void doInBackground(Void... params) {
-            requestProject();
+            if(!mode.equals("check out")){
+                requestProject();
+            }
+            else{
+                requestCheckOut();
+            }
+            try
+            {
+                synchronized (this)
+                {
+                    for(int i = 0 ; i < 10000 ; i++) {
+
+                        int c = (int)((i/ 100) * (i + 1));
+                        publishProgress(c);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return null;
         }
 
@@ -204,14 +347,28 @@ public class CheckOutFragment extends Fragment {
 
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            //pd.dismiss();
+            pd.dismiss();
             //setContentView(activity);
+            if(mode.equals("check out")){
+//                if (ok2001) {
+//                    getFragmentManager().popBackStack();
+//                    editor.putString("checkInLocation","---");
+//                    editor.putString("checkInLocationID", "null");
+//                    editor.putString("dateCheckIn", "--/--/--");
+//                    editor.putString("isCheckIn", "CHECK IN");
+//                    editor.commit();
+//                } else {
+//                    Toast.makeText(getContext(), "Unsuccessfully", Toast.LENGTH_SHORT).show();
+//                }
+            }
+            else{
+//                if (ok2002) {
+//                    arrayAdapter.notifyDataSetChanged();
+//                } else {
+//                    Toast.makeText(getContext(), "Unsuccessfully", Toast.LENGTH_SHORT).show();
+//                }
+            }
 
-                if (ok200) {
-                    arrayAdapter.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(getContext(), "Unsuccessfully", Toast.LENGTH_SHORT).show();
-                }
             }
     }
 }

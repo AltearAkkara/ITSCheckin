@@ -53,9 +53,9 @@ public class CheckInFragment extends Fragment {
     SharedPreferences sp;
     SharedPreferences.Editor editor;
     int position = 0;
-    ArrayList<String> location = new ArrayList<String>(),idLocation = new ArrayList<String>();
+    ArrayList<String> location = new ArrayList<String>(), idLocation = new ArrayList<String>();
 
-    Boolean ok200 = true;
+    int ok2001 = 2,ok2002 = 2;
     ArrayAdapter<String> arrayAdapter;
     String mode = "location";
 
@@ -87,9 +87,12 @@ public class CheckInFragment extends Fragment {
         userText.setText(sp.getString("Username", "testuser"));
         checkinText.setText(sp.getString("checkInLocation", "---"));
         dateCheckinText.setText(sp.getString("dateCheckIn", "--/--/--"));
-        checkInButton.setText(sp.getString("isCheckIn","CHECK IN"));
+        checkInButton.setText(sp.getString("isCheckIn", "CHECK IN"));
 
-        new LoadCheckin().execute();
+        if (location.isEmpty()) {
+            mode = "location";
+            new LoadCheckin().execute();
+        }
 
         arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_expandable_list_item_1, location);
         listView.setAdapter(arrayAdapter);
@@ -97,6 +100,10 @@ public class CheckInFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 position = i;
+                Toast.makeText(getContext(), "Select : " + location.get(position).toString(), Toast.LENGTH_SHORT);
+                editor.putString("checkInLocation", location.get(position));
+                editor.putString("checkInLocationID", idLocation.get(position));
+                Log.i("kkkk",position+"");
             }
         });
 
@@ -115,33 +122,35 @@ public class CheckInFragment extends Fragment {
                     alertDialogBuilder.setMessage("Do you want to check in?");
                     alertDialogBuilder.setView(dialogView);
                     final EditText userInput = (EditText) dialogView.findViewById(R.id.editText7);
-                    if(idLocation.get(position).equals("999")) userInput.setHint("Check In Detail(Require)");
-                    else userInput.setHint("Check In Detail(Optional)");
-                    alertDialogBuilder
-                            .setCancelable(true)
-                            .setPositiveButton("OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog,
-                                                            int id) {
-                                            //must be define in preference
-                                            if(idLocation.get(position).equals("999")&&userInput.getText().length()==0){
-                                                Toast.makeText(getContext(),"Require detail.",Toast.LENGTH_LONG).show();
+                    if (!idLocation.isEmpty()) {
+                        if (idLocation.get(position).equals("999"))
+                            userInput.setHint("Check In Detail(Require)");
+                        else userInput.setHint("Check In Detail(Optional)");
+                        alertDialogBuilder
+                                .setCancelable(true)
+                                .setPositiveButton("OK",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog,
+                                                                int id) {
+                                                //must be define in preference
+                                                if (idLocation.get(position).equals("999") && userInput.getText().length() == 0) {
+                                                    Toast.makeText(getContext(), "Require detail.", Toast.LENGTH_LONG).show();
+                                                } else {
+                                                    mode = "checkin";
+                                                    new LoadCheckin().execute();
+                                                }
                                             }
-                                            else{
-                                                mode = "checkin";
-                                                new LoadCheckin().execute();
+                                        })
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog,
+                                                                int id) {
+                                                dialog.cancel();
                                             }
-                                        }
-                                    })
-                            .setNegativeButton("Cancel",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog,
-                                                            int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
+                                        });
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    }
                 }
             }
         });
@@ -188,19 +197,20 @@ public class CheckInFragment extends Fragment {
                     resCode = response.getString("code");
                     resType = response.getString("type");
                     resRespone = response.getString("response");
+                    Log.i("location", "ok1");
                     if (resReturn.equals("true")) {
                         JSONArray resData = response.getJSONArray("data");
                         for (int i = 0; i < resData.length(); i++) {
                             location.add(resData.getJSONObject(i).getString("name"));
                             idLocation.add(resData.getJSONObject(i).getString("id"));
+                            Log.i("location", "ok" + i);
                         }
-                        ok200 = true;
+                        ok2001 = 1;
                         arrayAdapter.notifyDataSetChanged();
-                        Log.i("location","ok");
-                    }
-                    else{
-                        Toast.makeText(getContext(),resRespone,Toast.LENGTH_LONG).show();
-                        Log.i("location"," no ok");
+                        Log.i("location", "ok");
+                    } else {
+                        Toast.makeText(getContext(), resRespone, Toast.LENGTH_LONG).show();
+                        Log.i("location", " no ok");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -210,24 +220,25 @@ public class CheckInFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError response) {
                 Log.d("Response: ", response.toString());
-                ok200 = false;
-                //Toast.makeText(getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
+                ok2001 = 0;
+                Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
             }
         });
 
         requestQueue.add(jsObjRequest);
     }
 
-    public void requestLcgin() {
+    public void requestCheckin() {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         final String url = "http://itsserver.itsconsultancy.co.th:8080/Itsconsultancy/itscheckin/service/Checkin/";
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", Constants.API_KEY);
         params.put("u", sp.getString("Username", "testuser"));
-        params.put("locationid", sp.getString("checkInLocationID", "-"));
+        params.put("locationid", idLocation.get(position));
+
         params.put("lat", "180.5462");
         params.put("lng", "85.1354");
-        params.put("uniqueid", sp.getString("Username", "IMEI"));
+        params.put("uniqueid", sp.getString("IMEI", "123456789012345"));
         params.put("mode", "dev");
 
         CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
@@ -236,17 +247,25 @@ public class CheckInFragment extends Fragment {
                 String resReturn, resCode, resType, resRespone;
 
                 try {
+                    Log.i("location", "ok1");
                     resReturn = response.getString("return");
                     resCode = response.getString("code");
                     resType = response.getString("type");
                     resRespone = response.getString("response");
                     if (resReturn.equals("true")) {
-                        ok200 = true;
-
-                    }
-                    else{
-                        Toast.makeText(getContext(),resRespone,Toast.LENGTH_LONG).show();
-                        ok200 = false;
+                        ok2002 = 1;
+                        editor.putString("checkInLocation", location.get(position));
+                        editor.putString("checkInLocationID", idLocation.get(position));
+                        editor.putString("dateCheckIn", new Date().toString());
+                        editor.putString("isCheckIn", "CHECK OUT");
+                        editor.commit();
+                        checkinText.setText(sp.getString("checkInLocation", "---"));
+                        dateCheckinText.setText(sp.getString("dateCheckIn", "--/--/--"));
+                        checkInButton.setText(sp.getString("isCheckIn", "CHECK OUT"));
+                        Log.i("location", "ok2");
+                    } else {
+                        Toast.makeText(getContext(), resRespone , Toast.LENGTH_LONG).show();
+                        ok2002 = 0;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -256,8 +275,8 @@ public class CheckInFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError response) {
                 Log.d("Response: ", response.toString());
-                ok200 = false;
-                //Toast.makeText(getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
+                ok2002 = 0;
+                Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -269,26 +288,42 @@ public class CheckInFragment extends Fragment {
         ProgressDialog pd;
 
         protected void onPreExecute() {
-            pd = new ProgressDialog(activity);
+            pd = new ProgressDialog(getActivity());
 //            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pd.setTitle("Loging in...");
             pd.setMessage("Loading ...");
             pd.setCancelable(false);
             pd.setIndeterminate(false);
-            pd.setMax(100);
-            pd.setProgress(0);
+//            pd.setMax(100);
+//            pd.setProgress(0);
             pd.show();
 
         }
 
         protected Void doInBackground(Void... params) {
-            publishProgress(20);
+            //publishProgress(20);
             if (mode.equals("checkin")) {
-                requestLcgin();
-                publishProgress(60);
+                //publishProgress(60);
+                requestCheckin();
+                //publishProgress(100);
+
             } else {
+                //publishProgress(80);
                 requestLcation();
-                publishProgress(80);
+                //publishProgress(100);
+            }
+            try
+            {
+                synchronized (this)
+                {
+                    for(int i = 0 ; i < 10000 ; i++) {
+
+                        int c = (int)((i/ 100) * (i + 1));
+                        publishProgress(c);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return null;
         }
@@ -302,27 +337,29 @@ public class CheckInFragment extends Fragment {
             pd.dismiss();
             //setContentView(activity);
             if (mode.equals("location")) {
-                if (ok200) {
-                    arrayAdapter.notifyDataSetChanged();
-                } else {
+                if (ok2001 == 1) {
+//                    arrayAdapter.notifyDataSetChanged();
+                } else if (ok2001 == 0){
                     Toast.makeText(getContext(), "Unsuccessfully", Toast.LENGTH_SHORT).show();
-                }
-            }
-            else{
-                if(ok200){
-                    editor.putString("checkInLocation", location.get(position));
-                    editor.putString("checkInLocationID", idLocation.get(position));
-                    editor.putString("dateCheckIn", new Date().toString());
-                    editor.putString("isCheckIn", "CHECK OUT");
-
-                    editor.commit();
-
-                    checkinText.setText(sp.getString("checkInLocation", "---"));
-                    dateCheckinText.setText(sp.getString("dateCheckIn", "--/--/--"));
-                    checkInButton.setText(sp.getString("isCheckIn","CHECK OUT"));
                 }
                 else{
+                    //Toast.makeText(getContext(), "Try again", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                if (ok2002 == 1) {
+//                    editor.putString("checkInLocation", location.get(position));
+//                    editor.putString("checkInLocationID", idLocation.get(position));
+//                    editor.putString("dateCheckIn", new Date().toString());
+//                    editor.putString("isCheckIn", "CHECK OUT");
+//                    editor.commit();
+//                    checkinText.setText(sp.getString("checkInLocation", "---"));
+//                    dateCheckinText.setText(sp.getString("dateCheckIn", "--/--/--"));
+//                    checkInButton.setText(sp.getString("isCheckIn", "CHECK OUT"));
+                } else if (ok2002 == 0){
                     Toast.makeText(getContext(), "Unsuccessfully", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    //Toast.makeText(getContext(), "Try again", Toast.LENGTH_SHORT).show();
                 }
             }
         }

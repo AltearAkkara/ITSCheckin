@@ -7,14 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class CheckoutAdapter extends ArrayAdapter<String> {
 
-    String[] str,str2,str3;
+    ArrayList<String> str = new ArrayList<String>(),str2 = new ArrayList<String>(),str3 = new ArrayList<String>();
     Context mContext;
     LayoutInflater INFLATER;
 
     public CheckoutAdapter(Context context, int viewResourceId
-            , String[] objects1,String[] obStrings2,String[] obStrings3) {
+            , ArrayList<String> objects1,  ArrayList<String> obStrings2,  ArrayList<String> obStrings3) {
         super(context, viewResourceId, objects1);
         str = objects1;
         str2 = obStrings2;
@@ -31,11 +33,11 @@ public class CheckoutAdapter extends ArrayAdapter<String> {
             view = mInflater.inflate(R.layout.activity_checkout_adapter, parent, false);
 
         TextView textViewName = (TextView)view.findViewById(R.id.textView6);
-        textViewName.setText(str[position]);
+        textViewName.setText(str.get(position));
         TextView textViewDesc = (TextView)view.findViewById(R.id.textView7);
-        textViewDesc.setText(str2[position]);
+        textViewDesc.setText(str2.get(position));
         TextView textViewTime = (TextView)view.findViewById(R.id.textView8);
-        textViewTime.setText(str3[position]);
+        textViewTime.setText(str3.get(position));
         return view;
     }
 }
