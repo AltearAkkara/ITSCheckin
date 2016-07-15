@@ -307,6 +307,21 @@ public class OutsideFragment extends Fragment {
     private byte[] getFileDataFromDrawable() {
         //Drawable drawable = ContextCompat.getDrawable(context, id);
         Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        if(bitmap.getWidth()>bitmap.getHeight()){
+            if(bitmap.getWidth()>1024){
+                bitmap = Bitmap.createScaledBitmap(bitmap,1024 * bitmap.getHeight() / bitmap.getWidth(), 1024, false);
+            }
+        }
+        else if(bitmap.getWidth()<bitmap.getHeight()){
+            if(bitmap.getHeight()>1024){
+                bitmap = Bitmap.createScaledBitmap(bitmap,1024, 1024 * bitmap.getWidth() / bitmap.getHeight(), false);
+            }
+        }
+        else{
+            if(bitmap.getHeight()>1024){
+                bitmap = Bitmap.createScaledBitmap(bitmap,1024, 1024, false);
+            }
+        }
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
