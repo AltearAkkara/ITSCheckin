@@ -280,6 +280,7 @@ public class CheckOutFragment extends Fragment {
                         editor.putString("checkInLocationID", "null");
                         editor.putString("dateCheckIn", "--/--/--");
                         editor.putString("isCheckIn", "CHECK IN");
+                        editor.putString("checkinType","-");
                         editor.commit();
                     }
                     else{
@@ -308,8 +309,8 @@ public class CheckOutFragment extends Fragment {
         protected void onPreExecute() {
             pd = new ProgressDialog(activity);
 //            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pd.setTitle("Loging in...");
-            pd.setMessage("Loading ...");
+            pd.setTitle("Loading ...");
+            pd.setMessage("just a second ...");
             pd.setCancelable(false);
             pd.setIndeterminate(false);
 //            pd.setMax(100);

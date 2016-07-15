@@ -9,13 +9,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class CheckoutAdapter extends ArrayAdapter<String> {
+public class CheckInHistoryAdapter extends ArrayAdapter<String> {
 
     ArrayList<String> str,str2,str3;
     Context mContext;
     LayoutInflater INFLATER;
 
-    public CheckoutAdapter(Context context, int viewResourceId
+    public CheckInHistoryAdapter(Context context, int viewResourceId
             , ArrayList<String> objects1,  ArrayList<String> obStrings2,  ArrayList<String> obStrings3) {
         super(context, viewResourceId, objects1);
         str = objects1;
@@ -30,16 +30,14 @@ public class CheckoutAdapter extends ArrayAdapter<String> {
                 (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if(view == null)
-            view = mInflater.inflate(R.layout.activity_checkout_adapter, parent, false);
+            view = mInflater.inflate(R.layout.activity_check_in_history_adapter, parent, false);
 
-        TextView textViewName = (TextView)view.findViewById(R.id.textView6);
+        TextView textViewName = (TextView)view.findViewById(R.id.textView19);
         textViewName.setText(str.get(position));
-        TextView textViewDesc = (TextView)view.findViewById(R.id.textView7);
+        TextView textViewDesc = (TextView)view.findViewById(R.id.textView20);
         textViewDesc.setText(str2.get(position));
-        TextView textViewTime = (TextView)view.findViewById(R.id.textView8);
+        TextView textViewTime = (TextView)view.findViewById(R.id.textView21);
         textViewTime.setText(str3.get(position));
         return view;
     }
-
-
 }

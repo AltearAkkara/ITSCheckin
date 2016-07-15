@@ -44,12 +44,30 @@
         android:id="@+id/listView6"
         android:layout_weight="0.5" />
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imageView2"
-        android:src="@drawable/icon_camera_flat"
-        android:layout_weight="1" />
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.5"
+        android:layout_margin="10dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView4"
+            android:layout_alignParentTop="true"
+            android:src="#e1e1e1"
+            android:layout_alignParentBottom="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Take photo"
+            android:id="@+id/button18"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:orientation="horizontal"

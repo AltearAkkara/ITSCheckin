@@ -50,6 +50,7 @@ public class CheckInFragment extends Fragment {
     Button checkInButton, checkInHistoryButton;
     TextView userText, dateText, checkinText, dateCheckinText;
     ListView listView;
+    Button checkinTYPE;
     SharedPreferences sp;
     SharedPreferences.Editor editor;
     int position = 0;
@@ -83,11 +84,12 @@ public class CheckInFragment extends Fragment {
         checkinText = (TextView) rootView.findViewById(R.id.textView2);
         dateCheckinText = (TextView) rootView.findViewById(R.id.textView3);
         listView = (ListView) rootView.findViewById(R.id.listView);
-
+        checkinTYPE = (Button)rootView.findViewById(R.id.button7);
         userText.setText(sp.getString("Username", "testuser"));
         checkinText.setText(sp.getString("checkInLocation", "---"));
         dateCheckinText.setText(sp.getString("dateCheckIn", "--/--/--"));
         checkInButton.setText(sp.getString("isCheckIn", "CHECK IN"));
+        checkinTYPE.setText(sp.getString("checkinType","-"));
 
         if (location.isEmpty()) {
             mode = "location";
@@ -101,8 +103,6 @@ public class CheckInFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 position = i;
                 Toast.makeText(getContext(), "Select : " + location.get(position).toString(), Toast.LENGTH_SHORT);
-                editor.putString("checkInLocation", location.get(position));
-                editor.putString("checkInLocationID", idLocation.get(position));
                 Log.i("kkkk",position+"");
             }
         });
@@ -158,7 +158,7 @@ public class CheckInFragment extends Fragment {
         checkInHistoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                activity.changeFragmentByFragment("checkin_history");
             }
         });
         //interval date 1sec
@@ -253,15 +253,19 @@ public class CheckInFragment extends Fragment {
                     resType = response.getString("type");
                     resRespone = response.getString("response");
                     if (resReturn.equals("true")) {
+                        String checkin_time = response.getString("checkin_time");
+                        String checkin_type = response.getString("checkin_type");
                         ok2002 = 1;
                         editor.putString("checkInLocation", location.get(position));
                         editor.putString("checkInLocationID", idLocation.get(position));
-                        editor.putString("dateCheckIn", new Date().toString());
+                        editor.putString("dateCheckIn",checkin_time);
+                        editor.putString("checkinType",checkin_type);
                         editor.putString("isCheckIn", "CHECK OUT");
                         editor.commit();
                         checkinText.setText(sp.getString("checkInLocation", "---"));
                         dateCheckinText.setText(sp.getString("dateCheckIn", "--/--/--"));
                         checkInButton.setText(sp.getString("isCheckIn", "CHECK OUT"));
+                        checkinTYPE.setText(sp.getString("checkinType", "-"));
                         Log.i("location", "ok2");
                     } else {
                         Toast.makeText(getContext(), resRespone , Toast.LENGTH_LONG).show();
@@ -290,8 +294,8 @@ public class CheckInFragment extends Fragment {
         protected void onPreExecute() {
             pd = new ProgressDialog(getActivity());
 //            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pd.setTitle("Loging in...");
-            pd.setMessage("Loading ...");
+            pd.setTitle("Loading ...");
+            pd.setMessage("just a second ...");
             pd.setCancelable(false);
             pd.setIndeterminate(false);
 //            pd.setMax(100);

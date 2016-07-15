@@ -34,20 +34,30 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp" />
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1">
+        android:layout_weight="0.7"
+        android:layout_margin="10dp">
 
-        <ImageButton
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/imageButton"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/icon_camera_flat" />
-    </LinearLayout>
+            android:id="@+id/imageView3"
+            android:layout_alignParentTop="true"
+            android:src="#e1e1e1"
+            android:layout_alignParentBottom="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Take photo"
+            android:id="@+id/button17"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:orientation="horizontal"

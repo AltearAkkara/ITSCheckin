@@ -66,15 +66,6 @@ public class LoginFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                pd = new ProgressDialog(getActivity());
-//                pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//                pd.setTitle("Loging in...");
-//                pd.setMessage("Loading ...");
-//                pd.setCancelable(false);
-//                pd.setIndeterminate(false);
-//                pd.setMax(100);
-//                pd.setProgress(0);
-//                pd.show();
                 new LoadLogin().execute();
             }
         });
