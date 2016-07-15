@@ -1,6 +1,9 @@
 package com.akkaratanapat.altear.itscheckin;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.akkaratanapat.altear.itscheckin.Fragment.CheckInFragment;
 import com.akkaratanapat.altear.itscheckin.Fragment.CheckInHistoryFragment;
@@ -18,12 +22,23 @@ import com.akkaratanapat.altear.itscheckin.Fragment.OutsideFragment;
 import com.akkaratanapat.altear.itscheckin.Fragment.OutsideHistoryFragment;
 import com.akkaratanapat.altear.itscheckin.Fragment.WithdrawFragment;
 import com.akkaratanapat.altear.itscheckin.Fragment.WithdrawHistoryFragment;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     Toolbar toolbar;
     AlertDialog.Builder aBuilder;
     AlertDialog alertDialog;
+    private GoogleApiClient googleApiClient;
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -35,9 +50,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
+        sp = getSharedPreferences("Temp", Context.MODE_PRIVATE);
+        editor = sp.edit();
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container01);
         LoginFragment myFragment = (LoginFragment) fragment;
+
 
 //        MainFragment myFragment = new MainFragment();
 //        FragmentManager manager = getSupportFragmentManager();
@@ -151,11 +174,51 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        googleApiClient.connect();
 
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        if (googleApiClient != null && googleApiClient.isConnected()) {
+            // Disconnect Google API Client if available and connected
+            googleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        LocationAvailability locationAvailability = LocationServices.FusedLocationApi.getLocationAvailability(googleApiClient);
+        if (locationAvailability.isLocationAvailable()) {
+            // Call Location Services
+            LocationRequest locationRequest = new LocationRequest()
+                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                    .setInterval(500);
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+        } else {
+            // Do something when Location Provider not available
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location != null) {
+            editor.putString("lat", "" + location.getLatitude());
+            editor.putString("lng", "" + location.getLongitude());
+            editor.commit();
+            Log.i("location", location.getLatitude() + " : " + location.getLongitude());
+        }
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 }

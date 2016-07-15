@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,7 +90,18 @@ public class CheckInFragment extends Fragment {
         checkinText.setText(sp.getString("checkInLocation", "---"));
         dateCheckinText.setText(sp.getString("dateCheckIn", "--/--/--"));
         checkInButton.setText(sp.getString("isCheckIn", "CHECK IN"));
-        checkinTYPE.setText(sp.getString("checkinType","-"));
+        if(sp.getString("checkinType","-").equals("0")){
+            checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_0));
+        }
+        else if(sp.getString("checkinType","-").equals("1")){
+            checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_1));
+        }
+        else if(sp.getString("checkinType","-").equals("2")){
+            checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_2));
+        }
+        else if(sp.getString("checkinType","-").equals("3")){
+            checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_3));
+        }
 
         if (location.isEmpty()) {
             mode = "location";
@@ -235,9 +247,8 @@ public class CheckInFragment extends Fragment {
         params.put("apikey", Constants.API_KEY);
         params.put("u", sp.getString("Username", "testuser"));
         params.put("locationid", idLocation.get(position));
-
-        params.put("lat", "180.5462");
-        params.put("lng", "85.1354");
+        params.put("lat", sp.getString("lat","13.766"));
+        params.put("lng", sp.getString("lat","100.605"));
         params.put("uniqueid", sp.getString("IMEI", "123456789012345"));
         params.put("mode", "dev");
 
@@ -265,7 +276,20 @@ public class CheckInFragment extends Fragment {
                         checkinText.setText(sp.getString("checkInLocation", "---"));
                         dateCheckinText.setText(sp.getString("dateCheckIn", "--/--/--"));
                         checkInButton.setText(sp.getString("isCheckIn", "CHECK OUT"));
-                        checkinTYPE.setText(sp.getString("checkinType", "-"));
+
+                        if(sp.getString("checkinType","-").equals("0")){
+                            checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_0));
+                        }
+                        else if(sp.getString("checkinType","-").equals("1")){
+                            checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_1));
+                        }
+                        else if(sp.getString("checkinType","-").equals("2")){
+                            checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_2));
+                        }
+                        else if(sp.getString("checkinType","-").equals("3")){
+                            checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_3));
+                        }
+
                         Log.i("location", "ok2");
                     } else {
                         Toast.makeText(getContext(), resRespone , Toast.LENGTH_LONG).show();

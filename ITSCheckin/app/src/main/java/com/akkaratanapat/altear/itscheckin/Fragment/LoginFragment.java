@@ -98,6 +98,7 @@ public class LoginFragment extends Fragment {
                     resRespone = response.getString("response");
                     if (resReturn.equals("true")) {
                         resCheckin = response.getString("checkin");
+                        //editor.putString("checkinType",resCheckin);
                         editor.putString("Username", userText.getText().toString());
                         editor.putString("Password", passwordText.getText().toString());
                         editor.commit();

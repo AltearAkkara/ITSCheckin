@@ -262,10 +262,6 @@ public class OutsideFragment extends Fragment {
                     resType = result.getString("type");
                     resRespone = result.getString("response");
                     Toast.makeText(getContext(), resRespone, Toast.LENGTH_SHORT).show();
-                    editor.putString("checkInLocation", locationEdit.getText().toString());
-                    //editor.putString("checkInLocationID", idLocation.get(position));
-                    editor.putString("isCheckIn", "CHECK OUT");
-                    editor.commit();
                     Log.d("Response: ", "imcoming");
                     getFragmentManager().popBackStack();
 
@@ -287,8 +283,8 @@ public class OutsideFragment extends Fragment {
                 params.put("u", sp.getString("Username", "testuser"));
                 params.put("location",locationEdit.getText().toString() );
                 params.put("detail", reasonEdit.getText().toString());
-                params.put("lat", "152.142");
-                params.put("lng", "88.128");
+                params.put("lat", sp.getString("lat","13.766"));
+                params.put("lng", sp.getString("lat","100.605"));
                 params.put("pid", code.get(position));
                 return params;
             }
