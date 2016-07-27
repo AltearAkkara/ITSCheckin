@@ -107,7 +107,7 @@ public class LoginFragment extends Fragment {
                         ok200 = true;
                     } else {
                         Toast.makeText(getContext(), resRespone, Toast.LENGTH_LONG).show();
-                        //pd.dismiss();
+
                         ok200 = false;
                     }
                 } catch (JSONException e) {
@@ -119,7 +119,7 @@ public class LoginFragment extends Fragment {
             public void onErrorResponse(VolleyError response) {
                 Log.d("Response: ", response.toString());
                 ok200 = false;
-                //Toast.makeText(getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
             }
         });
 

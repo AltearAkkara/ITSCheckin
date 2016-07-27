@@ -81,6 +81,7 @@ public class WithdrawFragment extends Fragment {
     private final String boundary = "apiclient-" + System.currentTimeMillis();
     private final String mimeType = "multipart/form-data;boundary=" + boundary;
     private byte[] multipartBody;
+    ProgressDialog pd;
 
     public WithdrawFragment() {
         // Required empty public constructor
@@ -106,7 +107,7 @@ public class WithdrawFragment extends Fragment {
                 AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                 alertDialog.setTitle("Choose option");
 
-                alertDialog.setMessage("This is a dialog");
+                alertDialog.setMessage("Take photo using  gallery or camera");
 
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Camera", new DialogInterface.OnClickListener() {
 
@@ -147,8 +148,21 @@ public class WithdrawFragment extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mode = "submit";
-                new LoadCheckin().execute();
+                final AlertDialog.Builder aBuilder = new AlertDialog.Builder(getActivity());
+                aBuilder.setTitle("Confirmation.").setMessage("Do you want to submit receipt?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mode = "submit";
+                        new LoadCheckin().execute();
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //do nothing
+                    }
+                });
+                AlertDialog alertDialog = aBuilder.create();
+                alertDialog.show();
             }
         });
         Button history = (Button) rootView.findViewById(R.id.button15);
@@ -162,6 +176,7 @@ public class WithdrawFragment extends Fragment {
         new LoadCheckin().execute();
         arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_expandable_list_item_1, name);
         listView.setAdapter(arrayAdapter);
+        listView.setSelector(R.color.dark_gray);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -289,6 +304,7 @@ public class WithdrawFragment extends Fragment {
                         Toast.makeText(getContext(),resRespone,Toast.LENGTH_LONG).show();
                         //ok200 = false;
                     }
+                    pd.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -298,6 +314,7 @@ public class WithdrawFragment extends Fragment {
             public void onErrorResponse(VolleyError response) {
                 Log.d("Response: ", response.toString());
                 //ok200 = false;
+                pd.dismiss();
                 Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
             }
         });
@@ -322,7 +339,7 @@ public class WithdrawFragment extends Fragment {
                     resRespone = result.getString("response");
                     Toast.makeText(getContext(), resRespone, Toast.LENGTH_SHORT).show();
                     getFragmentManager().popBackStack();
-
+                    pd.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -331,6 +348,7 @@ public class WithdrawFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("Response: ", error.toString());
+                pd.dismiss();
                 Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
             }
         }) {
@@ -363,7 +381,7 @@ public class WithdrawFragment extends Fragment {
 
 
     private class LoadCheckin extends AsyncTask<Void, Integer, Void> {
-        ProgressDialog pd;
+//        ProgressDialog pd;
 
         protected void onPreExecute() {
             pd = new ProgressDialog(getActivity());
@@ -407,7 +425,7 @@ public class WithdrawFragment extends Fragment {
 
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            pd.dismiss();
+//            pd.dismiss();
             //setContentView(activity);
 
         }

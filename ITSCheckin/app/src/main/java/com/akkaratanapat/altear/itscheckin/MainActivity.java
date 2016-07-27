@@ -111,7 +111,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             aBuilder.setTitle("Log out").setMessage("Do you want to log out?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    finish();
+                    LoginFragment myFragment = new LoginFragment();
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction transaction = manager.beginTransaction();
+                    transaction.replace(R.id.container01, myFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
             }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override

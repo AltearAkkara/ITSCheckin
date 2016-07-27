@@ -82,7 +82,6 @@ public class CheckOutFragment extends Fragment {
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getActivity(), detailList.get(i), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -128,34 +127,35 @@ public class CheckOutFragment extends Fragment {
                 addButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(getActivity(),"Add",Toast.LENGTH_SHORT).show();
-                        detailList.add(detail.getText().toString());
-                        temp ="";
-                        if(rt.length()>0){
-                            temp += "RT " + rt.getText().toString();
-                            rtList.add(rt.getText().toString());
-                        }
-                        else{
-                            rtList.add("");
-                        }
-                        if(ot.length()>0){
-                            temp += "OT " + rt.getText().toString();
-                            otList.add(ot.getText().toString());
-                        }
-                        else{
-                            otList.add("");
-                        }
-                        if(xt.length()>0){
-                            temp += "XT " + rt.getText().toString();
-                            xtList.add(xt.getText().toString());
-                        }else{
-                            xtList.add("");
-                        }
-                        timeList.add(temp);
+                        if(detail.getText().toString().equals("")||rt.getText().toString().equals("")||ot.getText().toString().equals("")||xt.getText().toString().equals("")){
+                            detailList.add(detail.getText().toString());
+                            temp ="";
+                            if(rt.length()>0){
+                                temp += "RT " + rt.getText().toString();
+                                rtList.add(rt.getText().toString());
+                            }
+                            else{
+                                rtList.add("");
+                            }
+                            if(ot.length()>0){
+                                temp += "OT " + rt.getText().toString();
+                                otList.add(ot.getText().toString());
+                            }
+                            else{
+                                otList.add("");
+                            }
+                            if(xt.length()>0){
+                                temp += "XT " + rt.getText().toString();
+                                xtList.add(xt.getText().toString());
+                            }else{
+                                xtList.add("");
+                            }
+                            timeList.add(temp);
 
-                        projectList.add(name.get(position));
-                        codeList.add(code.get(position));
-                        myAdapter.notifyDataSetChanged();
+                            projectList.add(name.get(position));
+                            codeList.add(code.get(position));
+                            myAdapter.notifyDataSetChanged();
+                        }
                         dialog.dismiss();
                     }
                 });
@@ -168,10 +168,10 @@ public class CheckOutFragment extends Fragment {
                 });
                 ListView listView = (ListView)dialog.findViewById(R.id.listView4);
                 listView.setAdapter(arrayAdapter);
+                listView.setSelector(R.color.dark_gray);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Toast.makeText(getContext(),"Select " + i,Toast.LENGTH_SHORT).show();
                         position = i;
                     }
                 });
@@ -276,7 +276,7 @@ public class CheckOutFragment extends Fragment {
                         String resData = response.getString("add_timesheet");
                         //ok200 = true;
                         getFragmentManager().popBackStack();
-                        editor.putString("checkInLocation","---");
+                        editor.putString("checkInLocation","Check in at :");
                         editor.putString("checkInLocationID", "null");
                         editor.putString("dateCheckIn", "--/--/--");
                         editor.putString("isCheckIn", "CHECK IN");

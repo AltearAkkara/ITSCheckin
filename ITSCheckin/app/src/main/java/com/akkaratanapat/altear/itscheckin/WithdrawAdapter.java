@@ -1,6 +1,7 @@
 package com.akkaratanapat.altear.itscheckin;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class WithdrawAdapter extends ArrayAdapter<String> {
@@ -49,10 +51,27 @@ public class WithdrawAdapter extends ArrayAdapter<String> {
         TextView textViewCost = (TextView)view.findViewById(R.id.textView17);
         textViewCost.setText(dateList.get(position));
         TextView textViewDate = (TextView)view.findViewById(R.id.textView18);
-        textViewDate.setText(costList.get(position));
-        Button buttonstatus = (Button)view.findViewById(R.id.button16);
-        buttonstatus.setText(statusList.get(position));
 
+        double amount = Double.parseDouble((costList.get(position)));
+        DecimalFormat formatter = new DecimalFormat("#,###.00");
+        textViewDate.setText(formatter.format(amount));
+        Button buttonstatus = (Button)view.findViewById(R.id.button16);
+        if(statusList.get(position).equals("0")){
+            buttonstatus.setVisibility(View.VISIBLE);
+            buttonstatus.setBackground(ContextCompat.getDrawable(mInflater.getContext(), R.drawable.checkin_type_0));
+        }
+        else if(statusList.get(position).equals("1")){
+            buttonstatus.setVisibility(View.VISIBLE);
+            buttonstatus.setBackground(ContextCompat.getDrawable(mInflater.getContext(), R.drawable.checkin_type_1));
+        }
+        else if(statusList.get(position).equals("2")){
+            buttonstatus.setVisibility(View.VISIBLE);
+            buttonstatus.setBackground(ContextCompat.getDrawable(mInflater.getContext(), R.drawable.checkin_type_2));
+        }
+        else if(statusList.get(position).equals("3")){
+            buttonstatus.setVisibility(View.VISIBLE);
+            buttonstatus.setBackground(ContextCompat.getDrawable(mInflater.getContext(), R.drawable.checkin_type_3));
+        }
         return view;
     }
 }

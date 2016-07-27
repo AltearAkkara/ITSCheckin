@@ -37,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -86,20 +87,30 @@ public class CheckInFragment extends Fragment {
         dateCheckinText = (TextView) rootView.findViewById(R.id.textView3);
         listView = (ListView) rootView.findViewById(R.id.listView);
         checkinTYPE = (Button)rootView.findViewById(R.id.button7);
+        checkinTYPE.setVisibility(View.GONE);
         userText.setText(sp.getString("Username", "testuser"));
-        checkinText.setText(sp.getString("checkInLocation", "---"));
+        checkinText.setText(sp.getString("checkInLocation", "Check in at :"));
         dateCheckinText.setText(sp.getString("dateCheckIn", "--/--/--"));
         checkInButton.setText(sp.getString("isCheckIn", "CHECK IN"));
+        if (checkInButton.getText().toString().equals("CHECK OUT")) {
+            checkInButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red));
+        }
+        else{
+            checkInButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.green));
+        }
         if(sp.getString("checkinType","-").equals("0")){
-            checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_0));
+            checkinTYPE.setVisibility(View.GONE);
         }
         else if(sp.getString("checkinType","-").equals("1")){
+            checkinTYPE.setVisibility(View.VISIBLE);
             checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_1));
         }
         else if(sp.getString("checkinType","-").equals("2")){
+            checkinTYPE.setVisibility(View.VISIBLE);
             checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_2));
         }
         else if(sp.getString("checkinType","-").equals("3")){
+            checkinTYPE.setVisibility(View.VISIBLE);
             checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_3));
         }
 
@@ -110,12 +121,13 @@ public class CheckInFragment extends Fragment {
 
         arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_expandable_list_item_1, location);
         listView.setAdapter(arrayAdapter);
+        listView.setSelector(R.color.dark_gray);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 position = i;
+
                 Toast.makeText(getContext(), "Select : " + location.get(position).toString(), Toast.LENGTH_SHORT);
-                Log.i("kkkk",position+"");
             }
         });
 
@@ -124,6 +136,7 @@ public class CheckInFragment extends Fragment {
             public void onClick(View view) {
 
                 if (checkInButton.getText().toString().equals("CHECK OUT")) {
+                    checkInButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red));
                     activity.changeFragmentByFragment("checkout");
                 } else {
                     LayoutInflater li = LayoutInflater.from(getContext());
@@ -183,7 +196,10 @@ public class CheckInFragment extends Fragment {
                 // do stuff then
                 // can call h again after work!
                 try {
-                    dateText.setText(new Date().toString());
+                    SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");//dd/MM/yyyy
+                    Date now = new Date();
+                    String strDate = sdfDate.format(now);
+                    dateText.setText(strDate.toString());
                 } finally {
 
                 }
@@ -276,23 +292,23 @@ public class CheckInFragment extends Fragment {
                         checkinText.setText(sp.getString("checkInLocation", "---"));
                         dateCheckinText.setText(sp.getString("dateCheckIn", "--/--/--"));
                         checkInButton.setText(sp.getString("isCheckIn", "CHECK OUT"));
-
+                        checkInButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red));
                         if(sp.getString("checkinType","-").equals("0")){
-                            checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_0));
+                            checkinTYPE.setVisibility(View.GONE);
                         }
                         else if(sp.getString("checkinType","-").equals("1")){
+                            checkinTYPE.setVisibility(View.VISIBLE);
                             checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_1));
                         }
                         else if(sp.getString("checkinType","-").equals("2")){
+                            checkinTYPE.setVisibility(View.VISIBLE);
                             checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_2));
                         }
                         else if(sp.getString("checkinType","-").equals("3")){
+                            checkinTYPE.setVisibility(View.VISIBLE);
                             checkinTYPE.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.checkin_type_3));
                         }
-
-                        Log.i("location", "ok2");
                     } else {
-                        Toast.makeText(getContext(), resRespone , Toast.LENGTH_LONG).show();
                         ok2002 = 0;
                     }
                 } catch (JSONException e) {
@@ -304,7 +320,6 @@ public class CheckInFragment extends Fragment {
             public void onErrorResponse(VolleyError response) {
                 Log.d("Response: ", response.toString());
                 ok2002 = 0;
-                Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -317,28 +332,20 @@ public class CheckInFragment extends Fragment {
 
         protected void onPreExecute() {
             pd = new ProgressDialog(getActivity());
-//            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pd.setTitle("Loading ...");
             pd.setMessage("just a second ...");
             pd.setCancelable(false);
             pd.setIndeterminate(false);
-//            pd.setMax(100);
-//            pd.setProgress(0);
             pd.show();
 
         }
 
         protected Void doInBackground(Void... params) {
-            //publishProgress(20);
             if (mode.equals("checkin")) {
-                //publishProgress(60);
                 requestCheckin();
-                //publishProgress(100);
 
             } else {
-                //publishProgress(80);
                 requestLcation();
-                //publishProgress(100);
             }
             try
             {
@@ -363,33 +370,6 @@ public class CheckInFragment extends Fragment {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             pd.dismiss();
-            //setContentView(activity);
-            if (mode.equals("location")) {
-                if (ok2001 == 1) {
-//                    arrayAdapter.notifyDataSetChanged();
-                } else if (ok2001 == 0){
-                    Toast.makeText(getContext(), "Unsuccessfully", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    //Toast.makeText(getContext(), "Try again", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                if (ok2002 == 1) {
-//                    editor.putString("checkInLocation", location.get(position));
-//                    editor.putString("checkInLocationID", idLocation.get(position));
-//                    editor.putString("dateCheckIn", new Date().toString());
-//                    editor.putString("isCheckIn", "CHECK OUT");
-//                    editor.commit();
-//                    checkinText.setText(sp.getString("checkInLocation", "---"));
-//                    dateCheckinText.setText(sp.getString("dateCheckIn", "--/--/--"));
-//                    checkInButton.setText(sp.getString("isCheckIn", "CHECK OUT"));
-                } else if (ok2002 == 0){
-                    Toast.makeText(getContext(), "Unsuccessfully", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    //Toast.makeText(getContext(), "Try again", Toast.LENGTH_SHORT).show();
-                }
-            }
         }
     }
 }

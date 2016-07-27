@@ -73,7 +73,7 @@ public class OutsideFragment extends Fragment {
     String mode = "location";
     SharedPreferences sp;
     SharedPreferences.Editor editor;
-
+    ProgressDialog pd;
 
 
     public OutsideFragment() {
@@ -100,7 +100,7 @@ public class OutsideFragment extends Fragment {
                 AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                 alertDialog.setTitle("Choose option");
 
-                alertDialog.setMessage("This is a dialog");
+                alertDialog.setMessage("Take photo using  gallery or camera");
 
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Camera", new DialogInterface.OnClickListener() {
 
@@ -141,8 +141,21 @@ public class OutsideFragment extends Fragment {
         checkIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mode = "checkin";
-                new LoadCheckin().execute();
+                final AlertDialog.Builder aBuilder = new AlertDialog.Builder(getActivity());
+                aBuilder.setTitle("Confirmation.").setMessage("Do you want to check in?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mode = "checkin";
+                        new LoadCheckin().execute();
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //do nothing
+                    }
+                });
+                AlertDialog alertDialog = aBuilder.create();
+                alertDialog.show();
             }
         });
         Button history = (Button) rootView.findViewById(R.id.button11);
@@ -155,6 +168,7 @@ public class OutsideFragment extends Fragment {
         new LoadCheckin().execute();
         arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_expandable_list_item_1, name);
         listView.setAdapter(arrayAdapter);
+        listView.setSelector(R.color.dark_gray);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -230,6 +244,7 @@ public class OutsideFragment extends Fragment {
                         Toast.makeText(getContext(),resRespone,Toast.LENGTH_LONG).show();
                         //ok200 = false;
                     }
+                    pd.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -239,6 +254,7 @@ public class OutsideFragment extends Fragment {
             public void onErrorResponse(VolleyError response) {
                 Log.d("Response: ", response.toString());
                 //ok200 = false;
+                pd.dismiss();
                 Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
             }
         });
@@ -248,23 +264,22 @@ public class OutsideFragment extends Fragment {
 
     public void requestCheckin() {
         String url = "http://itsserver.itsconsultancy.co.th:8080/Itsconsultancy/itscheckin/service/outside/";
-        Log.d("Response: ", "imcoming");
+        Log.d("Outside: ", "imcoming");
         MultipartRequest multipartRequest = new MultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse networkResponse) {
                 String resReturn, resCode, resType, resRespone;
                 String resultResponse = new String(networkResponse.data);
-                Log.d("Response: ", "imcoming");
                 try {
                     JSONObject result = new JSONObject(resultResponse);
                     resReturn = result.getString("return");
                     resCode = result.getString("code");
                     resType = result.getString("type");
                     resRespone = result.getString("response");
+                    Log.d("Outside2: ", "imcoming");
                     Toast.makeText(getContext(), resRespone, Toast.LENGTH_SHORT).show();
-                    Log.d("Response: ", "imcoming");
+                    pd.dismiss();
                     getFragmentManager().popBackStack();
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -273,6 +288,7 @@ public class OutsideFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("Response: ", error.toString());
+                pd.dismiss();
                 Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
             }
         }) {
@@ -328,7 +344,6 @@ public class OutsideFragment extends Fragment {
     }
 
     private class LoadCheckin extends AsyncTask<Void, Integer, Void> {
-        ProgressDialog pd;
 
         protected void onPreExecute() {
             pd = new ProgressDialog(getActivity());
@@ -370,7 +385,7 @@ public class OutsideFragment extends Fragment {
 
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            pd.dismiss();
+//            pd.dismiss();
             //setContentView(activity);
 
         }

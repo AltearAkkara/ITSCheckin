@@ -5,7 +5,7 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:id="@+id/editText5"
         android:hint="Job Detail"
         android:layout_gravity="center_horizontal"
@@ -14,7 +14,7 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:inputType="number"
         android:ems="10"
         android:hint="RT"
@@ -24,7 +24,7 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:inputType="number"
         android:ems="10"
         android:hint="OT"
@@ -34,7 +34,7 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:inputType="number"
         android:ems="10"
         android:hint="XT"
