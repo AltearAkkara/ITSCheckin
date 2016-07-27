@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             CheckInFragment myFragment = new CheckInFragment();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out,R.anim.push_left_in, R.anim.push_right_out);
             transaction.replace(R.id.container01, myFragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             CheckInHistoryFragment myFragment = new CheckInHistoryFragment();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out,R.anim.push_left_in, R.anim.push_right_out);
             transaction.replace(R.id.container01, myFragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             OutsideFragment myFragment = new OutsideFragment();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out,R.anim.push_left_in, R.anim.push_right_out);
             transaction.replace(R.id.container01, myFragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -102,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             WithdrawFragment myFragment = new WithdrawFragment();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out,R.anim.push_left_in, R.anim.push_right_out);
             transaction.replace(R.id.container01, myFragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -114,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     LoginFragment myFragment = new LoginFragment();
                     FragmentManager manager = getSupportFragmentManager();
                     FragmentTransaction transaction = manager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out,R.anim.push_left_in, R.anim.push_right_out);
                     transaction.replace(R.id.container01, myFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
@@ -130,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             CheckOutFragment myFragment = new CheckOutFragment();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out,R.anim.push_left_in, R.anim.push_right_out);
             transaction.replace(R.id.container01, myFragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -137,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             OutsideHistoryFragment myFragment = new OutsideHistoryFragment();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out,R.anim.push_left_in, R.anim.push_right_out);
             transaction.replace(R.id.container01, myFragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -144,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             WithdrawHistoryFragment myFragment = new WithdrawHistoryFragment();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out,R.anim.push_left_in, R.anim.push_right_out);
             transaction.replace(R.id.container01, myFragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -151,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             MainFragment myFragment = new MainFragment();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out,R.anim.push_left_in, R.anim.push_right_out);
             transaction.replace(R.id.container01, myFragment);
             transaction.addToBackStack(null);
             transaction.commit();

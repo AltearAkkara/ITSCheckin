@@ -279,6 +279,7 @@ public class OutsideFragment extends Fragment {
                     Log.d("Outside2: ", "imcoming");
                     Toast.makeText(getContext(), resRespone, Toast.LENGTH_SHORT).show();
                     pd.dismiss();
+
                     getFragmentManager().popBackStack();
                 } catch (JSONException e) {
                     e.printStackTrace();
