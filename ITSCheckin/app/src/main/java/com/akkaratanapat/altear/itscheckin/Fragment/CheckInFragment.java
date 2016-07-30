@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +80,7 @@ public class CheckInFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_check_in, container, false);
         sp = this.getActivity().getSharedPreferences("Temp", Context.MODE_PRIVATE);
         editor = sp.edit();
+        ((AppCompatActivity)getActivity()).setTitle("Check In");
         checkInButton = (Button) rootView.findViewById(R.id.button5);
         checkInHistoryButton = (Button) rootView.findViewById(R.id.button6);
         userText = (TextView) rootView.findViewById(R.id.textView4);

@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,6 +96,7 @@ public class WithdrawFragment extends Fragment {
         sp = this.getActivity().getSharedPreferences("Temp", Context.MODE_PRIVATE);
 
         editor = sp.edit();
+        ((AppCompatActivity)getActivity()).setTitle("Withdraw");
         takePhotoButton = (Button) rootView.findViewById(R.id.button18);
         titleEdit = (EditText) rootView.findViewById(R.id.editText8);
         detailEdit = (EditText) rootView.findViewById(R.id.editText9);

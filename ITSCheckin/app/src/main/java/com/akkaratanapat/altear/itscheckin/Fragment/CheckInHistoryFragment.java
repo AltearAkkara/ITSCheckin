@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +58,7 @@ public class CheckInHistoryFragment extends Fragment {
         View rootView =  inflater.inflate(R.layout.fragment_check_in_history, container, false);
         sp = this.getActivity().getSharedPreferences("Temp", Context.MODE_PRIVATE);
         editor = sp.edit();
+        ((AppCompatActivity)getActivity()).setTitle("Check In History");
         listView = (ListView) rootView.findViewById(R.id.listView8);
         new LoadCheckin().execute();
         arrayAdapter = new CheckInHistoryAdapter(getContext(), android.R.layout.simple_expandable_list_item_1, locationList,timeList,typeList);

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,7 @@ public class WithdrawHistoryFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_withdraw_history, container, false);
         sp = this.getActivity().getSharedPreferences("Temp", Context.MODE_PRIVATE);
         editor = sp.edit();
+        ((AppCompatActivity)getActivity()).setTitle("Withdraw History");
         new LoadWithdrawHistory().execute();
         myAdapter = new WithdrawAdapter(getActivity(),android.R.layout.simple_list_item_1,proList,codeList,titleList,detailList,statusList,costList,dateList);
         ListView myListView = (ListView)rootView.findViewById(R.id.listView7);

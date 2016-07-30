@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/editText3"
         android:hint="Out side location"
+        android:singleLine="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp" />
@@ -21,6 +22,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/editText4"
         android:hint="Reasone"
+        android:singleLine="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp" />

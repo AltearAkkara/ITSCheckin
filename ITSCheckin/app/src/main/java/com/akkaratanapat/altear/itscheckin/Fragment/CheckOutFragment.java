@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,6 +72,7 @@ public class CheckOutFragment extends Fragment {
         View rootView =  inflater.inflate(R.layout.fragment_check_out, container, false);
         sp = this.getActivity().getSharedPreferences("Temp", Context.MODE_PRIVATE);
         editor = sp.edit();
+        ((AppCompatActivity)getActivity()).setTitle("Check Out");
         if(name.isEmpty()){
             Log.i("name","empty");
             new LoadCheckOut().execute();

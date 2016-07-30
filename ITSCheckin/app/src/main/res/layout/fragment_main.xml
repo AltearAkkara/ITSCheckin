@@ -11,12 +11,14 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:layout_weight="0.7"></LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:layout_weight="1">
 
         <Button
@@ -36,7 +38,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Outside"
+            android:text="Outside\nWorking"
             android:id="@+id/button2"
             android:layout_weight="1"
             android:background="#0091EA"
@@ -52,6 +54,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:layout_weight="1">
 
         <Button
@@ -87,6 +90,8 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/white">
+
     </LinearLayout>
 </LinearLayout>

@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/editText8"
         android:hint="Title"
+        android:singleLine="true"
         android:layout_margin="10dp" />
 
     <TextView
@@ -34,6 +35,7 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:hint="Cost"
+        android:singleLine="true"
         android:ems="10"
         android:id="@+id/editText10"
         android:layout_marginLeft="10dp" />

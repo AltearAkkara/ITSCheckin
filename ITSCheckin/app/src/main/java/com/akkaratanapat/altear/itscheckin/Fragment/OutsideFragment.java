@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,6 +90,7 @@ public class OutsideFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_outside, container, false);
         sp = this.getActivity().getSharedPreferences("Temp", Context.MODE_PRIVATE);
         editor = sp.edit();
+        ((AppCompatActivity)getActivity()).setTitle("Outside Working");
         takePhotoButton = (Button) rootView.findViewById(R.id.button17);
         imageView = (ImageView) rootView.findViewById(R.id.imageView3);
         listView = (ListView) rootView.findViewById(R.id.listView3);
